@@ -3,6 +3,10 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
+  def show
+    @image = Image.find(params[:id])
+  end
+
   def create
     image_link = params[:image][:link]
 

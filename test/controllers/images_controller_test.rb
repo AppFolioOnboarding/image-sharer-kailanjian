@@ -27,4 +27,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.invalid-feedback', 'Link is invalid'
   end
 
+  def test_show
+    image = Image.create!(link: 'http://www.example.com/image.png')
+
+    get image_path(image)
+
+    assert_response :success
+    assert_select 'img' do
+      assert_select '[src=?]', image.link
+    end
+  end
 end
