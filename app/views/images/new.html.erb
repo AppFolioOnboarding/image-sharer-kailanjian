@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="mt-5">Image link submission</h1>
+
+            <%= simple_form_for @image do |f| %>
+                <%= f.input :link, placeholder: 'e.g. http://www.example.com/image.png' %>
+                <%= f.submit "Save Link", class: "btn-primary" %>
+            <% end %>
+        </div>
+    </div>
+</div>
