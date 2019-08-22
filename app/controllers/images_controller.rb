@@ -19,4 +19,8 @@ class ImagesController < ApplicationController
       render new_image_path, status: :unprocessable_entity
     end
   end
+
+  def index
+    @images = Image.order(created_at: :desc)
+  end
 end

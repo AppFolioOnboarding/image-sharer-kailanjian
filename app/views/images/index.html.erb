@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Hello, world</h1>
+            <%= link_to "Submit link", new_image_path %>
+            <br />
+            <br />
+            <table class="table">
+                <thead>Images</thead>
+                <ul class="list-group">
+                    <% @images.each do |image| %>
+                        <li class="list-group-item"><img src=<%= image.link %> /></li>
+                    <% end %>
+                </ul>
+            </table>
+        </div>
+    </div>
+</div>

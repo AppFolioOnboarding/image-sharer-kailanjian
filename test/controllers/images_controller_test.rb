@@ -1,6 +1,32 @@
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
+  def test_index__content
+    get '/'
+
+    assert_response :success
+    assert_select 'h1', 'Hello, world'
+    assert_select 'a' do
+      assert_select '[href=?]', new_image_path
+    end
+  end
+
+  def test_index__db_images
+    Image.create(link: 'http://www.image1.com')
+    Image.create(link: 'http://www.image2.com')
+    Image.create(link: 'http://www.image3.com')
+
+    get '/'
+
+    assert_response :success
+    assert_select 'img', 3
+    assert_select 'img' do |images|
+      assert_equal images[0].attr('src'), 'http://www.image3.com'
+      assert_equal images[1].attr('src'), 'http://www.image2.com'
+      assert_equal images[2].attr('src'), 'http://www.image1.com'
+    end
+  end
+
   def test_new
     get new_image_path
 
