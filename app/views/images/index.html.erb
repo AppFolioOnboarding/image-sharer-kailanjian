@@ -9,7 +9,7 @@
                 <thead>Images</thead>
                 <ul class="list-group">
                     <% @images.each do |image| %>
-                        <li class="list-group-item"><img src=<%= image.link %> /></li>
+                        <li class="list-group-item"><img class="display-image" src=<%= image.link %> /></li>
                     <% end %>
                 </ul>
             </table>

@@ -7,7 +7,7 @@
                 </div>
             <% end %>
             <h1 class="mt-5">Just Submitted:</h1>
-            <img src=<%= @image.link %> />
+            <img class="display-image" src=<%= @image.link %> />
             <div><%= link_to "Home", root_path %></div>
             <div><%= link_to "Submit another image", new_image_path %></div>
         </div>
