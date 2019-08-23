@@ -12,4 +12,9 @@ class ImageTest < ActionDispatch::IntegrationTest
 
     assert !image.valid?
   end
+
+  def test_image__taggable
+    image = Image.create!(link: 'http://www.example.com/image.png')
+    assert image.has_attribute?(:tag_list)
+  end
 end
