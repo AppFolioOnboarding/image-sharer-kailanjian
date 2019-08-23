@@ -32,7 +32,10 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h1', 'Image link submission'
-    assert_select 'form'
+    assert_select 'input[type=text]' do |_text_inputs|
+      assert_select '[name=?]', 'image[link]'
+      assert_select '[name=?]', 'image[tag_list]'
+    end
   end
 
   def test_create

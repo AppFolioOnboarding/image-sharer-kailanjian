@@ -8,9 +8,7 @@ class ImagesController < ApplicationController
   end
 
   def create
-    image_link = params[:image][:link]
-
-    @image = Image.new(link: image_link)
+    @image = Image.new(params.require(:image).permit(:link, :tag_list))
 
     if @image.save
       flash[:success] = 'Successfully saved image'
