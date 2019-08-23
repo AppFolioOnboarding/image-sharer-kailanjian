@@ -30,6 +30,29 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_index__tag_filter_images
+    Image.create(link: 'http://www.image1.com', tag_list: 'hello')
+    Image.create(link: 'http://www.image2.com', tag_list: 'world')
+    Image.create(link: 'http://www.image3.com', tag_list: 'one')
+    Image.create(link: 'http://www.image4.com', tag_list: 'one, two, three')
+
+    get '/images?tag=one'
+
+    assert_response :success
+    assert_select 'img', 2
+    assert_select 'img' do |images|
+      assert_equal images[0].attr('src'), 'http://www.image4.com'
+      assert_equal images[1].attr('src'), 'http://www.image3.com'
+    end
+  end
+
+  def test_index__invalid_tag
+    get '/images?tag=nonexistent'
+
+    assert_response :success
+    assert_select 'p', 'No images found for tag "nonexistent"'
+  end
+
   def test_new
     get new_image_path
 

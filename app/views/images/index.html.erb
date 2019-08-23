@@ -5,6 +5,9 @@
             <%= link_to "Submit link", new_image_path %>
             <br />
             <br />
+            <% if @images.empty? %>
+            <p>No images found for tag "<%= @tag %>"</p>
+            <% else %>
             <table class="table">
                 <thead>Images</thead>
                 <ul class="list-group">
@@ -20,6 +23,7 @@
                     <% end %>
                 </ul>
             </table>
+            <% end %>
         </div>
     </div>
 </div>
