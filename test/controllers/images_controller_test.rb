@@ -57,13 +57,30 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_show
+    image = Image.create!(link: 'http://www.example.com/image.png', tag_list: %w[hello world one])
+
+    get image_path(image)
+
+    assert_response :success
+    assert_select 'img' do |images|
+      assert_equal images[0].attr('src'), 'http://www.example.com/image.png'
+    end
+    assert_select 'span.badge' do |tags|
+      assert_equal tags[0].text, 'hello'
+      assert_equal tags[1].text, 'world'
+      assert_equal tags[2].text, 'one'
+    end
+  end
+
+  def test_show__no_tag
     image = Image.create!(link: 'http://www.example.com/image.png')
 
     get image_path(image)
 
     assert_response :success
-    assert_select 'img' do
-      assert_select '[src=?]', image.link
+    assert_select 'span.badge', 0
+    assert_select 'img' do |images|
+      assert_equal images[0].attr('src'), 'http://www.example.com/image.png'
     end
   end
 end
