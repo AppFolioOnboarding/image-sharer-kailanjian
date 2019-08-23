@@ -12,9 +12,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_index__db_images
-    Image.create(link: 'http://www.image1.com')
-    Image.create(link: 'http://www.image2.com')
-    Image.create(link: 'http://www.image3.com')
+    Image.create!(link: 'http://www.image1.com', tag_list: 'hello')
+    Image.create!(link: 'http://www.image2.com', tag_list: 'world')
+    Image.create!(link: 'http://www.image3.com', tag_list: 'one, two, three').reload
 
     get '/'
 
@@ -25,6 +25,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal images[1].attr('src'), 'http://www.image2.com'
       assert_equal images[2].attr('src'), 'http://www.image1.com'
     end
+    assert_select 'span.badge' do |tags|
+      assert_equal tags.map(&:text), %w[one two three world hello]
+    end
   end
 
   def test_new
@@ -32,7 +35,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h1', 'Image link submission'
-    assert_select 'input[type=text]' do |_text_inputs|
+    assert_select 'input[type=text]' do
       assert_select '[name=?]', 'image[link]'
       assert_select '[name=?]', 'image[tag_list]'
     end
