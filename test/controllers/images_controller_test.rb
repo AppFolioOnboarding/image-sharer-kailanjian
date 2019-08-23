@@ -25,7 +25,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal images[1].attr('src'), 'http://www.image2.com'
       assert_equal images[2].attr('src'), 'http://www.image1.com'
     end
-    assert_select 'span.badge' do |tags|
+    assert_select 'a.badge' do |tags|
       assert_equal tags.map(&:text), %w[one two three world hello]
     end
   end
@@ -68,7 +68,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'img' do |images|
       assert_equal images[0].attr('src'), 'http://www.example.com/image.png'
     end
-    assert_select 'span.badge' do |tags|
+    assert_select 'a.badge' do |tags|
       assert_equal tags[0].text, 'hello'
       assert_equal tags[1].text, 'world'
       assert_equal tags[2].text, 'one'
@@ -81,7 +81,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get image_path(image)
 
     assert_response :success
-    assert_select 'span.badge', 0
+    assert_select 'a.badge', 0
     assert_select 'img' do |images|
       assert_equal images[0].attr('src'), 'http://www.example.com/image.png'
     end
