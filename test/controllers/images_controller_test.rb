@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ImagesControllerTest < ActionDispatch::IntegrationTest
+class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable Metrics/ClassLength
   def test_index__content
     get '/'
 
@@ -80,6 +80,32 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_select '.invalid-feedback', 'Link is invalid'
+  end
+
+  def test_destroy
+    image_to_destroy = Image.create!(link: 'http://www.example.com/imageD.png', tag_list: 'hello, world')
+    Image.create!(link: 'http://www.example.com/image1.png', tag_list: 'hello, world')
+    Image.create!(link: 'http://www.example.com/image2.png', tag_list: 'hello, world')
+    Image.create!(link: 'http://www.example.com/image3.png', tag_list: 'hello, world')
+
+    delete image_path(image_to_destroy)
+
+    assert_redirected_to images_path
+    follow_redirect!
+    assert_select 'img', 3
+    assert_select 'img' do |images|
+      assert_equal images[0].attr('src'), 'http://www.example.com/image3.png'
+      assert_equal images[1].attr('src'), 'http://www.example.com/image2.png'
+      assert_equal images[2].attr('src'), 'http://www.example.com/image1.png'
+    end
+  end
+
+  def test_destroy__invalid
+    image_to_destroy = Image.create!(link: 'http://www.example.com/imageD.png', tag_list: 'hello, world')
+
+    delete image_path(image_to_destroy)
+
+    assert_raise(ActiveRecord::RecordNotFound) { delete image_path(image_to_destroy) }
   end
 
   def test_show

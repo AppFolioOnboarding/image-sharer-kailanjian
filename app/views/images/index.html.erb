@@ -18,7 +18,10 @@
                             </div>
                         <% image.tag_list.each do |tag| %>
                             <%= link_to tag, images_path(:tag => tag), :class => 'badge badge-primary' %>
-                        <% end%>
+                          <% end%>
+                          <div>
+                            <%= link_to 'Delete Picture', image_path(image), method: :delete, data: {confirm: 'Are you sure you want to delete this image?'}, class: 'btn btn-danger mt-2' %>
+                          </div>
                         </li>
                     <% end %>
                 </ul>
