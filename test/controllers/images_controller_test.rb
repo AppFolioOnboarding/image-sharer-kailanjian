@@ -25,9 +25,32 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal images[1].attr('src'), 'http://www.image2.com'
       assert_equal images[2].attr('src'), 'http://www.image1.com'
     end
-    assert_select 'span.badge' do |tags|
+    assert_select 'a.badge' do |tags|
       assert_equal tags.map(&:text), %w[one two three world hello]
     end
+  end
+
+  def test_index__tag_filter_images
+    Image.create(link: 'http://www.image1.com', tag_list: 'hello')
+    Image.create(link: 'http://www.image2.com', tag_list: 'world')
+    Image.create(link: 'http://www.image3.com', tag_list: 'one')
+    Image.create(link: 'http://www.image4.com', tag_list: 'one, two, three')
+
+    get '/images?tag=one'
+
+    assert_response :success
+    assert_select 'img', 2
+    assert_select 'img' do |images|
+      assert_equal images[0].attr('src'), 'http://www.image4.com'
+      assert_equal images[1].attr('src'), 'http://www.image3.com'
+    end
+  end
+
+  def test_index__invalid_tag
+    get '/images?tag=nonexistent'
+
+    assert_response :success
+    assert_select 'p', 'No images found for tag "nonexistent"'
   end
 
   def test_new
@@ -68,7 +91,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'img' do |images|
       assert_equal images[0].attr('src'), 'http://www.example.com/image.png'
     end
-    assert_select 'span.badge' do |tags|
+    assert_select 'a.badge' do |tags|
       assert_equal tags[0].text, 'hello'
       assert_equal tags[1].text, 'world'
       assert_equal tags[2].text, 'one'
@@ -81,7 +104,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get image_path(image)
 
     assert_response :success
-    assert_select 'span.badge', 0
+    assert_select 'a.badge', 0
     assert_select 'img' do |images|
       assert_equal images[0].attr('src'), 'http://www.example.com/image.png'
     end
