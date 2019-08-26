@@ -98,6 +98,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
       assert_equal images[1].attr('src'), 'http://www.example.com/image2.png'
       assert_equal images[2].attr('src'), 'http://www.example.com/image1.png'
     end
+    assert_select 'div', 'Successfully deleted image'
   end
 
   def test_destroy__invalid
