@@ -9,7 +9,13 @@
                 <thead>Images</thead>
                 <ul class="list-group">
                     <% @images.each do |image| %>
-                        <li class="list-group-item"><img class="display-image" src=<%= image.link %> /></li>
+                        <li class="list-group-item">
+                        <img class="display-image" src=<%= image.link %> />
+                        <br />
+                        <% image.tag_list.each do |tag| %>
+                            <span class="badge badge-primary"><%= tag %></span>
+                        <% end%>
+                        </li>
                     <% end %>
                 </ul>
             </table>

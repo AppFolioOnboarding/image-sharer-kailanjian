@@ -5,6 +5,7 @@
 
             <%= simple_form_for @image do |f| %>
                 <%= f.input :link, placeholder: 'e.g. http://www.example.com/image.png' %>
+                <%= f.input :tag_list, placeholder: 'first, second, third'%>
                 <%= f.submit "Save Link", class: "btn-primary" %>
             <% end %>
         </div>
