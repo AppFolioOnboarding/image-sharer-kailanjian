@@ -18,6 +18,9 @@ export default function App() {
           </FormGroup>
           <Button color="primary">Submit</Button>
         </Form>
+        <footer className="font-small text-center">
+          <small>Copyright: Appfolio Inc. Onboarding</small>
+        </footer>
       </Container>
     </div>
   );
