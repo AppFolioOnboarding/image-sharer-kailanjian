@@ -102,11 +102,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest # rubocop:disable M
   end
 
   def test_destroy__invalid
-    image_to_destroy = Image.create!(link: 'http://www.example.com/imageD.png', tag_list: 'hello, world')
+    delete '/images/10'
 
-    delete image_path(image_to_destroy)
-
-    assert_raise(ActiveRecord::RecordNotFound) { delete image_path(image_to_destroy) }
+    assert_redirected_to images_path
+    follow_redirect!
+    assert_select 'div', 'Image not found!'
   end
 
   def test_show
