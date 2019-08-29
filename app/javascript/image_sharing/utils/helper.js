@@ -39,15 +39,9 @@ export function serialize(obj, prefix) {
  */
 function checkResponseStatus(res) {
   const status = res.status;
-  if (status === 204) {
-    return Promise.resolve(); // No content
-  } else if (status === 302) {
-    window.location.reload();
-    return Promise.reject();
-  } else if (status === 401 || status === 403) {
-    window.location.reload();
-    return Promise.reject();
-  } else if (status < 200 || status >= 300) {
+  if (status === 201) {
+    return Promise.resolve(res); // No content
+  } else if (status == 422) {
     return res
       .text()
       .then(text => {
