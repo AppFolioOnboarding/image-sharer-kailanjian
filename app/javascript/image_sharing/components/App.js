@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import Header from './Header';
+import { post } from '../utils/helper';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -10,10 +11,23 @@ export default class App extends React.Component {
       commentsInput: '',
       status: 'none'
     };
-    this.handleNameInputChange.bind(this);
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
+
+    this.setState({ status: 'loading' });
+    const postResult = post('/api/feedbacks', { feedback: {
+      name: this.state.nameInput,
+      comments: this.state.commentsInput
+    } });
+
+    return postResult.then(() => {
+      this.setState({ status: 'success' });
+      this.setState({ nameInput: '', commentsInput: '' });
+    }).catch(() => {
+      this.setState({ status: 'error' });
+    });
   };
 
    handleNameInputChange = (event) => {
@@ -27,6 +41,14 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
+        { this.state.status === 'success' &&
+          <Alert color="success">Successfully submitted feedback!</Alert> }
+        { this.state.status === 'error' &&
+          <Alert color="danger">
+            Could not submit feedback! Please check that you filled in both fields.
+          </Alert> }
+        { this.state.status === 'loading' &&
+          <Alert color="info">Submitting feedback please wait...</Alert> }
         <Container>
           <Header title="Tell us what you think" />
           <Form action="/api/feedbacks" onSubmit={this.handleSubmit} method="POST">
